@@ -1,0 +1,12 @@
+name: FeatherPowders
+authors: [nahkd123]
+version: 0.0.1-SNAPSHOT
+api-version: 1.17
+main: featherpowders.FeatherPowders
+
+commands:
+  featherpowders:
+    description: FeatherPowders admin command
+    usage: "/fp"
+    permission: featherpowders.admin.command
+    aliases: ["fp", "feather"]

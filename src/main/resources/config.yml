@@ -1,0 +1,5 @@
+# FeatherPowders configuration file
+
+Drivers:                                          # List all drivers by typing "/fp drivers show"
+  Data:
+    Default Driver: "featherpowders-binary"
