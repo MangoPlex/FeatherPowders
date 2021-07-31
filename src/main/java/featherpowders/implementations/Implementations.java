@@ -12,7 +12,7 @@ public class Implementations {
         
         plugin.getServer().getPluginManager().registerEvents(new InventoryEventsHandler(), plugin);
         
-        plugin.getCommand("featherpowders").setExecutor(new AdminCommand(plugin));
+        plugin.getCommand("featherpowders").setExecutor(new AdminCommand());
     }
     
 }

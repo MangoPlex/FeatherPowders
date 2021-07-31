@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import featherpowders.FeatherPowders;
 import featherpowders.commands.ArgumentsMatch;
 import featherpowders.commands.Command;
 import featherpowders.commands.Pattern;
@@ -16,10 +15,8 @@ import featherpowders.items.CustomType;
 import featherpowders.items.ItemsDriver;
 
 public class AdminCommand extends Command {
-
-    private FeatherPowders plugin;
     
-    public AdminCommand(FeatherPowders plugin) { this.plugin = plugin; }
+    public AdminCommand() {}
     
     //
     // Main
