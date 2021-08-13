@@ -16,12 +16,10 @@ import featherpowders.drivers.Driver;
  */
 public abstract class DataDriver extends Driver {
     
-    /**
-     * Get the driver name. This will be used to determine which driver should be used by default (which is determined by
-     * user)
-     * @return
-     */
-    public abstract String getDriverName();
+    @Override
+    public String getDriverCategory() { return "data"; }
+    @Override
+    public boolean isDefault() { return this == defaultDriver; }
     
     /**
      * Get data container for plugin. If the container does not exists, it will be created
@@ -36,6 +34,7 @@ public abstract class DataDriver extends Driver {
     public void registerDriver() {
         if (getDriver(getDriverName()) != null) throw new RuntimeException("The driver with name '" + getDriverName() + "' already registered! Perhaps plugins conflict occured?");
         drivers.add(this);
+        addDriverToMap(this);
         if (getDriverName().equalsIgnoreCase(plugin.getConfig().getString("Drivers.Data.Default Driver"))) defaultDriver = this;
     }
     

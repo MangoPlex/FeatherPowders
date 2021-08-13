@@ -2,12 +2,16 @@ package featherpowders.commands;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+
+import featherpowders.items.ItemsDriver;
 
 public abstract class Command implements CommandExecutor, TabCompleter {
     
@@ -20,7 +24,7 @@ public abstract class Command implements CommandExecutor, TabCompleter {
                 ArgumentsMatch argsMatch = method.getDeclaredAnnotation(ArgumentsMatch.class);
                 if (argsMatch == null) continue;
                 
-                MatchingEntry entry = new MatchingEntry(argsMatch, method);
+                MatchingEntry entry = new MatchingEntry(this, argsMatch, method);
                 _entries.add(entry);
             }
             
@@ -46,16 +50,16 @@ public abstract class Command implements CommandExecutor, TabCompleter {
     }
     
     @Override
-    public boolean onCommand(CommandSender arg0, org.bukkit.command.Command arg1, String arg2, String[] arg3) {
+    public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         List<String> methodArgs = new ArrayList<>();
-        MatchingEntry entry = findFromArgs(methodArgs, arg3);
+        MatchingEntry entry = findFromArgs(methodArgs, args);
         if (entry == null) {
-            sendError(arg0, "No command found", "Please check your input");
+            sendError(sender, "No command found", "Please check your input");
             return true;
         }
         
         Object[] methodInputArgs = new Object[1 + methodArgs.size()];
-        methodInputArgs[0] = arg0;
+        methodInputArgs[0] = sender;
         
         String[] convertedMethodArgs = methodArgs.toArray(String[]::new);
         System.arraycopy(convertedMethodArgs, 0, methodInputArgs, 1, convertedMethodArgs.length);
@@ -64,21 +68,33 @@ public abstract class Command implements CommandExecutor, TabCompleter {
             entry.method.invoke(this, methodInputArgs);
         } catch (Exception e) {
             e.printStackTrace();
-            sendError(arg0, "An error occured", "Please check your console for information");
+            sendError(sender, "An error occured", "Please check your console for information");
         }
         return true;
     }
     
     @Override
-    public List<String> onTabComplete(CommandSender arg0, org.bukkit.command.Command arg1, String arg2, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         String[] matchArgs = new String[args.length - 1];
         System.arraycopy(args, 0, matchArgs, 0, args.length - 1);
         String keyword = args[args.length - 1];
         
         ArrayList<String> suggestions = new ArrayList<>();
-        for (MatchingEntry entry : _entries) entry.suggestTab(suggestions, keyword, matchArgs);
+        for (MatchingEntry entry : _entries) entry.suggestTab(suggestions, sender, keyword, matchArgs);
         
         return suggestions;
+    }
+    
+    // Pre-made suggestion methods
+    public List<String> _suggestion_selector(CommandSender sender, String keyword) {
+        List<String> out = new ArrayList<String>();
+        out.addAll(Arrays.asList("@a", "@e", "@s", "@r"));
+        if (!keyword.startsWith("@")) out.addAll(Bukkit.getOnlinePlayers().stream().map(v -> v.getName()).toList());
+        return out;
+    }
+    
+    public List<String> _suggestion_item_id(CommandSender sender, String keyword) {
+        return ItemsDriver.getDefaultDriver().getAllTypes().stream().map(v -> v.dataId).toList();
     }
     
 }

@@ -4,8 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import featherpowders.data.DataDriver;
+import featherpowders.enums.ServerVersion;
 import featherpowders.implementations.Implementations;
-import featherpowders.versions.ServerVersion;
 
 public class FeatherPowders extends JavaPlugin {
     

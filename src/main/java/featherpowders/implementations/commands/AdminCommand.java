@@ -10,6 +10,7 @@ import featherpowders.commands.ArgumentsMatch;
 import featherpowders.commands.Command;
 import featherpowders.commands.Pattern;
 import featherpowders.data.DataDriver;
+import featherpowders.drivers.Driver;
 import featherpowders.items.CustomStack;
 import featherpowders.items.CustomType;
 import featherpowders.items.ItemsDriver;
@@ -59,38 +60,22 @@ public class AdminCommand extends Command {
     })
     public void driversList(CommandSender sender, String type) { driversList(sender, type, ""); }
     
-    @SuppressWarnings("unchecked")
     @ArgumentsMatch(pattern = {
         @Pattern(literal = { "drivers", "driver" }),
         @Pattern(literal = "list"),
-        @Pattern(asMethodArg = true, suggest = { "all", "data" }),
+        @Pattern(asMethodArg = true, suggest = { "all", "data", "item" }),
         @Pattern(asMethodArg = true, readToEnd = true)
     })
     public void driversList(CommandSender sender, String type, String search) {
         sender.sendMessage("§8 --- ");
         sender.sendMessage("§7Listing all drivers with type '" + type + "':");
         
-        // TODO: Clean this mess
-        
-        if (type.equalsIgnoreCase("all") || type.equalsIgnoreCase("data")) {
-            sender.sendMessage("§7 - §bData Storage Drivers ('data')");
-            for (DataDriver driver : DataDriver.getAllDrivers()) if (driver.getDriverName().contains(search)) {
-                String line;
-                if (DataDriver.getDefaultDriver() == driver) line = "§7    + §b" + driver.getDriverName() + " §f(default)";
-                else line = "§7    + §f" + driver.getDriverName();
-                sender.sendMessage(line);
-            }
-        }
-        
-        if (type.equalsIgnoreCase("all") || type.equalsIgnoreCase("item")) {
-            sender.sendMessage("§7 - §bCustom Items Drivers ('item')");
-            for (ItemsDriver<?, ?> driver : ItemsDriver.getDrivers()) if (((ItemsDriver<CustomType, CustomStack>) driver).typeType.getName().contains(search)) {
-                String line;
-                if (ItemsDriver.getDefaultDriver() == driver) line = "§7    + §b" + driver.typeType.getName() + " §f(default)";
-                else line = "§7    + §f" + driver.typeType.getName();
-                sender.sendMessage(line);
-            }
-        }
+        Driver.categorizedDrivers.keySet().stream().filter(v -> type.equals("all") || v.equals(type)).forEach(category -> {
+            sender.sendMessage("§7- §b" + category + "§7:");
+            Driver.categorizedDrivers.get(category).stream().filter(v -> v.getDriverName().contains(search)).forEach(driver -> {
+                sender.sendMessage(" §7+ §f" + driver.getDriverName() + (driver.isDefault()? " §7(default)" : ""));
+            });
+        });
         
         sender.sendMessage("§8 --- ");
     }
@@ -120,8 +105,8 @@ public class AdminCommand extends Command {
     @ArgumentsMatch(pattern = {
         @Pattern(literal = { "item", "items" }),
         @Pattern(literal = "give"),
-        @Pattern(asMethodArg = true),
-        @Pattern(asMethodArg = true),
+        @Pattern(suggestMethod = "#selector", asMethodArg = true),
+        @Pattern(suggestMethod = "#item-id", asMethodArg = true),
         @Pattern(asMethodArg = true)
     })
     public void itemsGive(CommandSender sender, String name, String id, String amountText) {

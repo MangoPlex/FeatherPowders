@@ -1,6 +1,6 @@
 package featherpowders.schematics;
 
-import featherpowders.versions.ServerVersion;
+import featherpowders.enums.ServerVersion;
 
 public class SchematicNotSupportedException extends RuntimeException {
 

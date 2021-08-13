@@ -79,6 +79,16 @@ public abstract class ItemsDriver<T extends CustomType, S extends CustomStack> e
      */
     public abstract ItemStack fromCustom(S stack);
     
+    /**
+     * Get driver name. The name is the class name of this driver instance
+     */
+    @Override
+    public String getDriverName() { return this.getClass().getName(); }
+    @Override
+    public String getDriverCategory() { return "item"; }
+    @Override
+    public boolean isDefault() { return this == getDefaultDriver(); }
+    
     @SuppressWarnings("unchecked")
     public S[] fromBukkit(ItemStack[] stacks) {
         CustomStack[] stacksOut = new CustomStack[stacks.length];
@@ -98,6 +108,9 @@ public abstract class ItemsDriver<T extends CustomType, S extends CustomStack> e
         return stacksOut;
     }
     
-    public void registerDriver() { drivers.add(this); }
+    public void registerDriver() {
+        drivers.add(this);
+        addDriverToMap(this);
+    }
     
 }

@@ -1,15 +1,20 @@
 package featherpowders.commands;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.bukkit.command.CommandSender;
+
 public class MatchingEntry implements Comparable<MatchingEntry> {
     
+    public final Command command;
     public final ArgumentsMatch match;
     public final Method method;
     
-    public MatchingEntry(ArgumentsMatch match, Method method) {
+    public MatchingEntry(Command command, ArgumentsMatch match, Method method) {
+        this.command = command;
         this.match = match;
         this.method = method;
     }
@@ -50,7 +55,7 @@ public class MatchingEntry implements Comparable<MatchingEntry> {
         return true;
     }
     
-    public void suggestTab(List<String> suggestions, String keyword, String... args) {
+    public void suggestTab(List<String> suggestions, CommandSender sender, String keyword, String... args) {
         int argPos = 0;
         String arg;
         
@@ -63,6 +68,35 @@ public class MatchingEntry implements Comparable<MatchingEntry> {
                     suggestions.add(contains + keyword);
                 }
                 suggestions.addAll(Stream.of(pat.suggest()).filter(p -> p.startsWith(keyword)).toList());
+                
+                String methodName = pat.suggestMethod();
+                if (methodName.length() > 0) try {
+                    if (methodName.startsWith("#")) methodName = "_suggestion_" + methodName.substring(1).replaceAll("-", "_");
+                    
+                    Method method = command.getClass().getMethod(methodName, CommandSender.class, String.class);
+                    Object obj = method.invoke(command, sender, keyword);
+                    if (obj instanceof List<?> list) {
+                        suggestions.addAll(list.stream().map(v -> v.toString()).filter(v -> v.startsWith(keyword)).toList());
+                    } else {
+                        String[] arr = (String[]) obj;
+                        suggestions.addAll(Stream.of(arr).map(v -> v.toString()).filter(v -> v.startsWith(keyword)).toList());
+                    }
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                    System.err.println("[FeatherPowders/Commands] No such suggestion method: " + methodName + "(CommandSender, String)");
+                    System.err.println("Please add this method inside your command class");
+                    System.err.println(" - #1: CommandSender that request tab complete");
+                    System.err.println(" - #2: Input keyword");
+                    System.err.println(" - Return: String[] | List<Object>");
+                } catch (IllegalAccessException e) {
+                    System.err.println("[FeatherPowders/Commands] Cannot access method: " + method.toString() + ". Please check your method modifier");
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                    System.err.println("[FeatherPowders/Commands] An unexpected exception thrown. Please send the stack trace above to our GitHub issues tab");
+                } catch (InvocationTargetException e) {
+                    System.err.println("[FeatherPowders/Commands] An exception thrown inside your method: " + method.toString() + ":");
+                    e.getTargetException().printStackTrace();
+                }
                 return;
             }
             arg = args[argPos++];

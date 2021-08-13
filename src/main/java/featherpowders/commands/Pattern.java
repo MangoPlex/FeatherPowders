@@ -12,6 +12,7 @@ public @interface Pattern {
     boolean readToEnd() default false;
     
     String[] suggest() default {};
+    String suggestMethod() default "";
     boolean asMethodArg() default false;
     
 }

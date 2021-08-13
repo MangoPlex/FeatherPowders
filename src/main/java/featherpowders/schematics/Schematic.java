@@ -44,7 +44,7 @@ import org.bukkit.block.data.type.TurtleEgg;
 
 import featherpowders.binary.BinaryReader;
 import featherpowders.binary.BinaryWriter;
-import featherpowders.versions.ServerVersion;
+import featherpowders.enums.ServerVersion;
 
 public class Schematic {
     
@@ -230,7 +230,7 @@ public class Schematic {
      * Clone the schematic
      */
     @Override
-    protected Schematic clone() throws CloneNotSupportedException {
+    public Schematic clone() {
         Schematic newSchem = new Schematic(width, height, depth);
         System.arraycopy(blocks, 0, newSchem.blocks, 0, volume);
         for (int i = 0; i < volume; i++) newSchem.datas[i] = datas[i] == null? null : datas[i].clone();

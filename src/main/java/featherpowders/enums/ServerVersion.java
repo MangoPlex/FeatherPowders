@@ -1,4 +1,4 @@
-package featherpowders.versions;
+package featherpowders.enums;
 
 import org.bukkit.Bukkit;
 
