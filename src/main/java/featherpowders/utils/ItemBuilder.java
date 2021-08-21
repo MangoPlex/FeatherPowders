@@ -7,13 +7,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemBuilder {
-    
     private ItemStack item;
     private ItemMeta meta;
     
+    public ItemBuilder(Material mat, int amount, ItemMeta meta) {
+        this.item = new ItemStack(mat, amount);
+        this.meta = meta;
+    }
+    
     public ItemBuilder(Material mat, int amount) {
         this.item = new ItemStack(mat, amount);
-        this.meta = item.getItemMeta();
+        this.meta = this.item.getItemMeta();
     }
     
     public ItemStack getItem() {
