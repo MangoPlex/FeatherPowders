@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import featherpowders.ui.PlayerUIData;
+import org.bukkit.event.inventory.InventoryDragEvent;
 
 public class InventoryEventsHandler implements Listener {
     
@@ -18,6 +19,15 @@ public class InventoryEventsHandler implements Listener {
         
         PlayerUIData uiData = PlayerUIData.getData(player);
         if (uiData.activeChestUI != null) uiData.activeChestUI.passClickEvent(event);
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        Player player = Bukkit.getPlayer(event.getWhoClicked().getUniqueId());
+        if (player == null) return;
+
+        PlayerUIData uiData = PlayerUIData.getData(player);
+        if (uiData.activeChestUI != null) event.setCancelled( uiData.activeChestUI.isDragEventCanceled());
     }
     
     @EventHandler
