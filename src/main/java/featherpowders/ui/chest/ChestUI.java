@@ -39,7 +39,7 @@ public abstract class ChestUI {
         handlers[y * 9 + x] = handler;
     }
 
-    public abstract void failback(InventoryClickEvent event);
+    public abstract void failback(InventoryClickEvent clickEvent);
     
     public void passClickEvent(InventoryClickEvent event) {
         if (event.getClickedInventory() != inventory) {

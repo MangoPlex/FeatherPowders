@@ -1,5 +1,6 @@
 package featherpowders.implementations.events;
 
+import featherpowders.FeatherPowders;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,7 +12,12 @@ import featherpowders.ui.PlayerUIData;
 import org.bukkit.event.inventory.InventoryDragEvent;
 
 public class InventoryEventsHandler implements Listener {
-    
+    private final FeatherPowders plugin;
+
+    public InventoryEventsHandler(FeatherPowders plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = Bukkit.getPlayer(event.getWhoClicked().getUniqueId());
@@ -27,7 +33,9 @@ public class InventoryEventsHandler implements Listener {
         if (player == null) return;
 
         PlayerUIData uiData = PlayerUIData.getData(player);
-        if (uiData.activeChestUI != null) event.setCancelled( uiData.activeChestUI.isDragEventCanceled());
+        if (uiData.activeChestUI != null) {
+            Bukkit.getScheduler().runTask(plugin, () -> event.setCancelled(uiData.activeChestUI.isDragEventCanceled()));
+        }
     }
     
     @EventHandler

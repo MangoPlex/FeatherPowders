@@ -10,7 +10,7 @@ public class Implementations {
     public static void init(FeatherPowders plugin) {
         new BinaryDataDriver().registerDriver();
         
-        plugin.getServer().getPluginManager().registerEvents(new InventoryEventsHandler(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new InventoryEventsHandler(plugin), plugin);
         
         plugin.getCommand("featherpowders").setExecutor(new AdminCommand());
     }
