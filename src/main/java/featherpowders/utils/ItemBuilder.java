@@ -35,4 +35,9 @@ public class ItemBuilder {
         return this;
     }
     
+    public ItemBuilder glow(Boolean glow) {
+        meta.addEnchant(Enchantment.DURABILITY, 4, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        return this;
+    }
 }
