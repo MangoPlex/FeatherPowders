@@ -38,6 +38,11 @@ public abstract class ChestUI {
         inventory.setItem(y * 9 + x, item);
         handlers[y * 9 + x] = handler;
     }
+    
+    public void set(int slot, ItemStack item, SlotHandler handler) {
+        inventory.setItem(slot, item);
+        handlers[slot] = handler;
+    }
 
     public abstract void failback(InventoryClickEvent clickEvent);
     
