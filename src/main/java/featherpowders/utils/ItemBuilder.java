@@ -7,13 +7,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemBuilder {
-    
     private ItemStack item;
     private ItemMeta meta;
     
+    public ItemBuilder(Material mat, int amount, ItemMeta meta) {
+        this.item = new ItemStack(mat, amount);
+        this.meta = meta;
+    }
+    
     public ItemBuilder(Material mat, int amount) {
         this.item = new ItemStack(mat, amount);
-        this.meta = item.getItemMeta();
+        this.meta = this.item.getItemMeta();
     }
     
     public ItemStack getItem() {
@@ -31,4 +35,9 @@ public class ItemBuilder {
         return this;
     }
     
+    public ItemBuilder glow(Boolean glow) {
+        meta.addEnchant(Enchantment.DURABILITY, 4, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        return this;
+    }
 }
