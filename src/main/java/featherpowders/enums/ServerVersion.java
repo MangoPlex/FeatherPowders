@@ -19,12 +19,13 @@ public enum ServerVersion {
     R1_15("Release 1.15",    false, true,  false, R1_14,  6),
     R1_16("Release 1.16",    false, true,  false, R1_15,  7),
     R1_17("Release 1.17",    false, true,  true,  R1_16,  8),
+    R1_18("Release 1.18",    false, true,  true,  R1_17,  9),
     
-    UNKNOWN("Unknown",       false, true,  true,  R1_17,  9),
+    UNKNOWN("Unknown",       false, true,  true,  R1_17,  10),
     ;
     
     public static final ServerVersion[] VERSIONS_BY_DATAID = {
-        R1_9, R1_10, R1_11, R1_12, R1_13, R1_14, R1_15, R1_16, R1_17, UNKNOWN
+        R1_9, R1_10, R1_11, R1_12, R1_13, R1_14, R1_15, R1_16, R1_17, R1_18, UNKNOWN
     }; 
     
     public final String friendlyName;
@@ -66,6 +67,7 @@ public enum ServerVersion {
         if (version != null) return version;
         
         String bukkitVersion = Bukkit.getBukkitVersion();
+        if (bukkitVersion.startsWith("1.18")) return version = R1_18;
         if (bukkitVersion.startsWith("1.17")) return version = R1_17;
         if (bukkitVersion.startsWith("1.16")) return version = R1_16;
         if (bukkitVersion.startsWith("1.15")) return version = R1_15;

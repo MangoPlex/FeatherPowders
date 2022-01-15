@@ -7,6 +7,11 @@ import featherpowders.data.DataDriver;
 import featherpowders.enums.ServerVersion;
 import featherpowders.implementations.Implementations;
 
+/**
+ * FeatherPowers main plugin class. Doesn't contains any static methods.
+ * @author nahkd
+ *
+ */
 public class FeatherPowders extends JavaPlugin {
     
     @Override
@@ -21,7 +26,7 @@ public class FeatherPowders extends JavaPlugin {
                     "§fYou're using " + ServerVersion.getCurrentVersion().friendlyName + ", which is too old.",
                     "§fWe haven't tested FeatherPowders on legacy version, therefore we can't guarantee",
                     "§fthat it will be bug-free",
-                    "§fFeatherPowder will continue to work, but it breaks sometime. You've been warned.",
+                    "§fFeatherPowder will continue to work, but it'll breaks sometime. You've been warned.",
                     ""
             });
         } else if (serverVersion == ServerVersion.UNKNOWN) {

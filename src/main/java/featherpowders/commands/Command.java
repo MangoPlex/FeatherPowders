@@ -13,6 +13,14 @@ import org.bukkit.command.TabCompleter;
 
 import featherpowders.items.ItemsDriver;
 
+/**
+ * Annotation Commands API: Base class. Extends this class and starts using annotations on top of
+ * every method names to create new subcommand. The annotation commands system also handles tab
+ * completion. To register your command, simply register it like how you've done with old fashioned
+ * way (something like <code>getCommand("42").setExecutor(new CustomCommand())</code>)
+ * @author nahkd
+ *
+ */
 public abstract class Command implements CommandExecutor, TabCompleter {
     
     private ArrayList<MatchingEntry> _entries = new ArrayList<>();
@@ -42,6 +50,12 @@ public abstract class Command implements CommandExecutor, TabCompleter {
         return null;
     }
     
+    /**
+     * Send error message with suggestion
+     * @param sender
+     * @param message
+     * @param suggestion
+     */
     public void sendError(CommandSender sender, String message, String suggestion) {
         sender.sendMessage(new String[] {
             "§cError while executing command: §f" + message,

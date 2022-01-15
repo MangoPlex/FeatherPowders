@@ -1,5 +1,10 @@
 package featherpowders.items;
 
+/**
+ * Custom item type, handled by the items driver
+ * @author nahkd
+ *
+ */
 public abstract class CustomType {
     
     /**

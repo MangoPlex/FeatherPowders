@@ -108,6 +108,9 @@ public abstract class ItemsDriver<T extends CustomType, S extends CustomStack> e
         return stacksOut;
     }
     
+    /**
+     * Register this driver so other plugins can use it
+     */
     public void registerDriver() {
         drivers.add(this);
         addDriverToMap(this);

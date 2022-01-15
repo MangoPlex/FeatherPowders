@@ -46,6 +46,12 @@ import featherpowders.binary.BinaryReader;
 import featherpowders.binary.BinaryWriter;
 import featherpowders.enums.ServerVersion;
 
+/**
+ * FeatherPowders schematic system. Schematics are used for storing structures into files, which
+ * can be transfered to other users, or use it with other plugins (Eg: dungeon schematics)
+ * @author nahkd
+ *
+ */
 public class Schematic {
     
     private static boolean versionInit = false;
@@ -116,6 +122,12 @@ public class Schematic {
     public final short[] blocks;
     public final BlockData[] datas;
     
+    /**
+     * Create new blank schematic with given size in 3 axes
+     * @param width
+     * @param height
+     * @param depth
+     */
     public Schematic(int width, int height, int depth) {
         this.width = width;
         this.height = height;
@@ -126,6 +138,11 @@ public class Schematic {
         getID(Material.AIR);
     }
     
+    /**
+     * Get schematic local ID for given material
+     * @param mat
+     * @return
+     */
     public int getID(Material mat) {
         if (!mappedMaterials.containsKey(mat)) {
             mappedMaterials.put(mat, mappedIDs.size());
@@ -138,6 +155,15 @@ public class Schematic {
         return (y * width * depth) + z * width + x;
     }
     
+    /**
+     * Set block at coordinate. This will also erase data at given XYZ (if any)
+     * @param x
+     * @param y
+     * @param z
+     * @param mat
+     * @see #setBlock(int, int, int, BlockData)
+     * @see #fromWorld(Location)
+     */
     public void setBlock(int x, int y, int z, Material mat) {
         int id = getID(mat), ptr = pointerAt(x, y, z);
         blocks[ptr] = (short) id;
@@ -147,6 +173,15 @@ public class Schematic {
         else datas[ptr] = null;
     }
     
+    /**
+     * Set block at coordinate with block data
+     * @param x
+     * @param y
+     * @param z
+     * @param data
+     * @see #setBlock(int, int, int, Material)
+     * @see #fromWorld(Location)
+     */
     public void setBlock(int x, int y, int z, BlockData data) {
         Material mat = data.getMaterial();
         int id = getID(mat), ptr = pointerAt(x, y, z);
@@ -155,6 +190,11 @@ public class Schematic {
         else datas[ptr] = null;
     }
     
+    /**
+     * Copy schematic from world
+     * @param lowerLeftBottom
+     * @see #pasteToWorld(Location)
+     */
     public void fromWorld(Location lowerLeftBottom) {
         World world = lowerLeftBottom.getWorld();
         int oX = lowerLeftBottom.getBlockX(), oY = lowerLeftBottom.getBlockY(), oZ = lowerLeftBottom.getBlockZ();
@@ -164,6 +204,11 @@ public class Schematic {
         }
     }
     
+    /**
+     * Paste schematic to world
+     * @param lowerLeftBottom
+     * @see #fromWorld(Location)
+     */
     public void pasteToWorld(Location lowerLeftBottom) {
         World world = lowerLeftBottom.getWorld();
         int oX = lowerLeftBottom.getBlockX(), oY = lowerLeftBottom.getBlockY(), oZ = lowerLeftBottom.getBlockZ(), ptr;
@@ -177,6 +222,11 @@ public class Schematic {
         }
     }
     
+    /**
+     * Write schematic to stream
+     * @param stream
+     * @throws IOException
+     */
     public void writeToStream(OutputStream stream) throws IOException {
         BinaryWriter writer = new BinaryWriter(stream);
         writer.writeVarUint(ServerVersion.getCurrentVersion().dataID);
@@ -192,6 +242,12 @@ public class Schematic {
         for (int i = 0; i < volume; i++) if (datas[i] != null) writer.writeString(datas[i].getAsString(true));
     }
     
+    /**
+     * Read schematic from stream
+     * @param stream
+     * @return
+     * @throws IOException
+     */
     public static Schematic readFromStream(InputStream stream) throws IOException {
         BinaryReader reader = new BinaryReader(stream);
         ServerVersion version = ServerVersion.VERSIONS_BY_DATAID[reader.readVarUint()];
