@@ -1,5 +1,9 @@
 # FeatherPowders configuration file
 
+General:
+  Language: "en-us"                               # FeatherPowders language
+                                                  # Does not affect other plugins
+
 Drivers:                                          # List all drivers by typing "/fp drivers show"
   Data:
     Default Driver: "featherpowders-binary"

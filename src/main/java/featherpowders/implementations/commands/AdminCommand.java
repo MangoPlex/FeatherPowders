@@ -6,10 +6,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import featherpowders.FeatherPowders;
 import featherpowders.commands.ArgumentsMatch;
 import featherpowders.commands.Command;
 import featherpowders.commands.Pattern;
-import featherpowders.data.DataDriver;
 import featherpowders.drivers.Driver;
 import featherpowders.items.CustomStack;
 import featherpowders.items.CustomType;
@@ -27,10 +27,10 @@ public class AdminCommand extends Command {
     @ArgumentsMatch(pattern = {})
     public void index(CommandSender sender) {
         sender.sendMessage(new String[] {
-            "§eFeather§6Powders",
-            "§f/fp §7Show this message",
-            "§f/fp drivers §7FeatherPowders drivers management",
-            "§f/fp items §7Custom items management"
+            FeatherPowders.translations.translate("commands.admin.header", "§eFeather§6Powders"),
+            "§f/fp §7" + FeatherPowders.translations.translate("commands.admin.fp", "Show this message"),
+            "§f/fp drivers §7" + FeatherPowders.translations.translate("commands.admin.drivers", "FeatherPowders drivers management"),
+            "§f/fp items §7" + FeatherPowders.translations.translate("commands.admin.items", "Custom items management")
         });
     }
     
@@ -42,8 +42,8 @@ public class AdminCommand extends Command {
     @ArgumentsMatch(pattern = { @Pattern(literal = { "drivers", "driver" }) })
     public void driversIndex(CommandSender sender) {
         sender.sendMessage(new String[] {
-            "§eFeather§6Powders§7/§fDrivers Management",
-            "§fdrivers list §b[type = all] [search] §7Show all installed drivers"
+            FeatherPowders.translations.translate("commands.admin.header", "§eFeather§6Powders") + "§7/§f" + FeatherPowders.translations.translate("commands.admin.header_drivers", "Drivers Management"),
+            "§fdrivers list §b[type = all] [search] §7" + FeatherPowders.translations.translate("commands.admin.drivers_list", "Show all installed drivers")
         });
     }
     
@@ -68,7 +68,7 @@ public class AdminCommand extends Command {
     })
     public void driversList(CommandSender sender, String type, String search) {
         sender.sendMessage("§8 --- ");
-        sender.sendMessage("§7Listing all drivers with type '" + type + "':");
+        sender.sendMessage(FeatherPowders.translations.translate("commands.admin.drivers_listing", "§7Listing all drivers with type '%s':", type));
         
         Driver.categorizedDrivers.keySet().stream().filter(v -> type.equals("all") || v.equals(type)).forEach(category -> {
             sender.sendMessage("§7- §b" + category + "§7:");
@@ -88,9 +88,9 @@ public class AdminCommand extends Command {
     @ArgumentsMatch(pattern = { @Pattern(literal = { "item", "items" }) })
     public void itemsIndex(CommandSender sender) {
         sender.sendMessage(new String[] {
-            "§eFeather§6Powders§7/§fCustom Items Management",
-            "§fitems give §e<Name> <ID> §b[amount = 1] §7Give item to player",
-            "§fitems list §b[search] §7List/search all items"
+            FeatherPowders.translations.translate("commands.admin.header", "§eFeather§6Powders") + "§7/§f" + FeatherPowders.translations.translate("commands.admin.header_items", "Custom Items Management"),
+            "§fitems give §e<Name> <ID> §b[amount = 1] §7" + FeatherPowders.translations.translate("commands.admin.items_give", "Give item to player"),
+            "§fitems list §b[search] §7" + FeatherPowders.translations.translate("commands.admin.items_list", "List/search all items")
         });
     }
     

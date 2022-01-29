@@ -1,11 +1,14 @@
 package featherpowders;
 
+import java.io.File;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import featherpowders.data.DataDriver;
 import featherpowders.enums.ServerVersion;
 import featherpowders.implementations.Implementations;
+import featherpowders.resources.Translations;
 
 /**
  * FeatherPowers main plugin class. Doesn't contains any static methods.
@@ -13,6 +16,8 @@ import featherpowders.implementations.Implementations;
  *
  */
 public class FeatherPowders extends JavaPlugin {
+    
+    public static Translations translations = new Translations(null, null);
     
     @Override
     public void onEnable() {
@@ -38,8 +43,11 @@ public class FeatherPowders extends JavaPlugin {
             });
         }
         
-        saveResource("config.yml", false);
-        reloadConfig();
+        if (!new File(getDataFolder(), "config.yml").exists()) {
+            saveResource("config.yml", false);
+            reloadConfig();
+        }
+        translations = Translations.of(this, getConfig().getString("General.Language", "en-us"));
         
         DataDriver.setupGlobal(this);
         
@@ -48,6 +56,7 @@ public class FeatherPowders extends JavaPlugin {
     
     @Override
     public void onDisable() {
+        translations.saveTranslations();
     }
     
 }

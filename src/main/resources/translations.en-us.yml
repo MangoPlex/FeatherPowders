@@ -1,0 +1,11 @@
+commands:
+  admin:
+    header: §eFeather§6Powders
+    fp: Show this message
+    drivers: FeatherPowders drivers management
+    items: Custom items management
+    header_drivers: Drivers Management
+    drivers_list: Show all installed drivers
+    header_items: Custom Items Management
+    items_give: Give item to player
+    items_list: List/search all items
