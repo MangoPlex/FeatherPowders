@@ -22,8 +22,8 @@ public class FeatherPowders extends JavaPlugin {
     @Override
     public void onEnable() {
         ServerVersion serverVersion = ServerVersion.getCurrentVersion();
-        System.out.println("[FeatherPowders] Server version: " + Bukkit.getVersion());
-        System.out.println("[FeatherPowders] Bukkit version: " + Bukkit.getBukkitVersion() + " (" + serverVersion.friendlyName + ")");
+        getLogger().info("Server version: " + Bukkit.getVersion());
+        getLogger().info("Bukkit version: " + Bukkit.getBukkitVersion() + " (" + serverVersion.friendlyName + ")");
         if (serverVersion.legacyVersion) {
             getServer().getConsoleSender().sendMessage(new String[] {
                     "",
